@@ -4,7 +4,6 @@
 using namespace std;
 
 int main() {
-    cout << "Gul Fatima, SE-23007" << endl;
     int length, breadth;
     cout << "Enter the length of rectangle : ";
     cin >> length;
