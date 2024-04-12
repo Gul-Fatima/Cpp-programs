@@ -18,7 +18,6 @@ void fibonacciSeries(int limit) {
 }
 int main() {
     int number_of_terms;
-    cout << "Gul Fatima, SE-23007" << endl;
     cout << "Enter the number of terms for Fibonacci series: ";
     cin >> number_of_terms;
 
