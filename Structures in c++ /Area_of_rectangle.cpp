@@ -9,7 +9,6 @@ struct Rectangle {
     float width;
 };
 int main() {
-    cout << "Gul Fatima, SE-23007" << endl;
     Rectangle rectangle1;
     cout << "Enter the length of rectangle : ";
     cin >> rectangle1.length;
