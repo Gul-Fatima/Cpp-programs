@@ -8,10 +8,9 @@ struct Person {
     int age;
 };
 int main() {
-    cout << "Gul Fatima, SE-23007" << endl;
     Person person1;
     person1.name = "Gul Fatima";
-    person1.age = 18;
+    person1.age = 44;
     cout << "Name : " << person1.name << endl;
     cout << "Age : " << person1.age << endl;
     _getch();
