@@ -4,7 +4,6 @@
 using namespace std;
 
 int main() {
-    cout << "Gul Fatima, SE-23007" << endl;
     int number;
 
     cout << "Enter the number to generate multiplication table: ";
