@@ -4,30 +4,36 @@
 using namespace std;
 
 class Book {
+private:
     int Pub_ID;
     char Title[100];
     char Author[100];
     char Subscriber[100];
 public:
-    Book() {}
-    Book(int id, const char title[100], const char author[100], const char subscriber[100]) {
+    Book() {
+        Pub_ID = -1;
+        strcpy_s(Title, "");
+        strcpy_s(Author, "");
+        strcpy_s(Subscriber, "");
+    }
+    Book(int id, const char* title, const char* author, const char* subscriber) {
         Pub_ID = id;
-        strcpy(Title, title);
-        strcpy(Author, author);
-        strcpy(Subscriber, subscriber);
+        strcpy_s(Title, title);
+        strcpy_s(Author, author);
+        strcpy_s(Subscriber, subscriber);
     }
 
     // Getter methods, for display method of library class:
-    int getId() { return Pub_ID; }
+    const int getId() { return Pub_ID; }
     const char* getTitle() { return Title; }
     const char* getAuthor() { return Author; }
     const char* getSubscriber() { return Subscriber; }
 
     // Setter methods for Add/Delete method of library:
     void setID(int id) { Pub_ID = id; }
-    void setTitle(const char title[100]) { strcpy(Title, title); }
-    void setAuthor(const char author[100]) { strcpy(Author, author); }
-    void setSubscriber(const char subscriber[100]) { strcpy(Subscriber, subscriber); }
+    void setTitle(const char* title) { strcpy_s(Title, title); }
+    void setAuthor(const char* author) { strcpy_s(Author, author); }
+    void setSubscriber(const char* subscriber) { strcpy_s(Subscriber, subscriber); }
 };
 
 class Library {
@@ -39,10 +45,10 @@ public:
         noOfBooks = 0;
     }
 
-    void AddBook(int id, const char title[100], const char author[100], const char subscriber[100]) {
+    void AddBook(int id, const char* title, const char* author, const char* subscriber) {
         for (int i = 0; i < noOfBooks; i++) {
             if (id == arr_book[i].getId()) {
-                cout << "This book is already available";
+                cout << "This book is already available" << endl;
                 return;
             }
         }
@@ -74,7 +80,7 @@ public:
     }
 
     // Edit details
-    void EditBook(int id, const char title[100], const char author[100], const char subscriber[100]) {
+    void EditBook(int id, const char* title, const char* author, const char* subscriber) {
         bool found = false;
         for (int i = 0; i < noOfBooks; ++i) {
             if (arr_book[i].getId() == id) {
