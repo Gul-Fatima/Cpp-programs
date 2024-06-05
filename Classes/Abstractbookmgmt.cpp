@@ -1,103 +1,125 @@
 #include <iostream>
-#include <conio.h>
+#include <cstring>
 
 using namespace std;
+
 class Book {
-	int Pub_ID;
-	char Title;
-	char Author;
-	char Subscriber;
+    int Pub_ID;
+    char Title[100];
+    char Author[100];
+    char Subscriber[100];
 public:
-	Book(){}
-	Book(int id, char title, char author, char subscriber ) {
-		Pub_ID = id;
-		Title = title;
-		Author = author;
-		Subscriber = subscriber;
-	}
+    Book() {}
+    Book(int id, const char title[], const char author[], const char subscriber[]) {
+        Pub_ID = id;
+        setTitle(title);
+        setAuthor(author);
+        setSubscriber(subscriber);
+    }
 
-	//Getter method, for display method of library class:
-	int getId() { return Pub_ID; }
-	char getTitle() { return Title; }
-	char getAuthor() { return Author; }
-	char getSubscriber() { return Subscriber; }
+    // Getter methods, for display method of library class:
+    int getId() { return Pub_ID; }
+    const char* getTitle() { return Title; }
+    const char* getAuthor() { return Author; }
+    const char* getSubscriber() { return Subscriber; }
 
-	//Setter methods for Add/Delete method of library:
-	void setID(int id) { Pub_ID = id; }
-	void setTitle(char title) { Title= title; }
-	void setAuthor(char author) { Author = author; }
-	void setSubscriber(char subs) { Subscriber = subs;}
+    // Setter methods for Add/Delete method of library:
+    void setID(int id) { Pub_ID = id; }
+    void setTitle(const char title[]) { copyString(Title, title); }
+    void setAuthor(const char author[]) { copyString(Author, author); }
+    void setSubscriber(const char subscriber[]) { copyString(Subscriber, subscriber); }
+
+    void copyString(char dest[], const char src[]) {
+        int i = 0;
+        while (src[i] != '\0' && i < 99) {
+            dest[i] = src[i];
+            ++i;
+        }
+        dest[i] = '\0';
+    }
 };
+
 class Library {
-	Book arr_book[50];
-	int noOfBooks;
+    Book arr_book[50];
+    int noOfBooks;
 public:
-	//non - parameterized constuctir
-	Library(){
-		noOfBooks = 0;
-	}
+    // Non-parameterized constructor
+    Library() {
+        noOfBooks = 0;
+    }
 
-	void AddBook(int id, char title, char author, char subscriber) {
-		for (int i = 0; i < noOfBooks; i++)
-		{
-			if (id == arr_book[i].getId())
-			{
-				cout << "This book is already available";
-				break;
-			}
-			else {
-				arr_book[noOfBooks].setID(id);
-				arr_book[noOfBooks].setTitle(title);
-				arr_book[noOfBooks].setAuthor(author);
-				arr_book[noOfBooks].setSubscriber(subscriber);
-				++noOfBooks;
-				}
-		}
+    void AddBook(int id, const char title[], const char author[], const char subscriber[]) {
+        for (int i = 0; i < noOfBooks; i++) {
+            if (id == arr_book[i].getId()) {
+                cout << "This book is already available" << endl;
+                return;
+            }
+        }
 
-	}
-	//delete book
-	void DeleteBook(int id) {
-		bool found = false;
-		for (int i = 0; i < noOfBooks; ++i) {
-			if (arr_book[i].getId() == id) {
-				found = true;
-				for (int j = i; j < noOfBooks - 1; ++j) {
-					arr_book[j] = arr_book[j + 1];
-				}
-				--noOfBooks;
-				cout << "Book with ID " << id << " deleted successfully." << endl;
-				break;
-			}
-		}
-		if (!found) {
-			cout << "Book with ID " << id << " not found." << endl;
-		}
-	}
-	// edit details
-	void EditBook(int id, char title, char author, char subscriber) {
-		bool found = false;
-		for (int i = 0; i < noOfBooks; ++i) {
-			if (arr_book[i].getId() == id) {
-				found = true;
-				arr_book[i].setTitle(title);
-				arr_book[i].setAuthor(author);
-				arr_book[i].setSubscriber(subscriber);
-				cout << "Book with ID " << id << " details updated successfully." << endl;
-				break;
-			}
-		}
-		if (!found) {
-			cout << "Book with ID " << id << " not found." << endl;
-		}
-	}
-	//Display Details
-	void Details() {
-		for (int i = 0; i < noOfBooks; i++){		
-				cout << "Publication id: " << arr_book[i].getId();
-				cout << "Book Title: " << arr_book[i].getTitle();
-				cout << "Author: " << arr_book[i].getAuthor();
-				cout << "Subscriber: " << arr_book[i].getSubscriber();
-			}	
-	}
-	//
+        arr_book[noOfBooks].setID(id);
+        arr_book[noOfBooks].setTitle(title);
+        arr_book[noOfBooks].setAuthor(author);
+        arr_book[noOfBooks].setSubscriber(subscriber);
+        ++noOfBooks;
+    }
+
+    // Delete book
+    void DeleteBook(int id) {
+        bool found = false;
+        for (int i = 0; i < noOfBooks; ++i) {
+            if (arr_book[i].getId() == id) {
+                found = true;
+                for (int j = i; j < noOfBooks - 1; ++j) {
+                    arr_book[j] = arr_book[j + 1];
+                }
+                --noOfBooks;
+                cout << "Book with ID " << id << " deleted successfully." << endl;
+                break;
+            }
+        }
+        if (!found) {
+            cout << "Book with ID " << id << " not found." << endl;
+        }
+    }
+
+    // Edit details
+    void EditBook(int id, const char title[], const char author[], const char subscriber[]) {
+        bool found = false;
+        for (int i = 0; i < noOfBooks; ++i) {
+            if (arr_book[i].getId() == id) {
+                found = true;
+                arr_book[i].setTitle(title);
+                arr_book[i].setAuthor(author);
+                arr_book[i].setSubscriber(subscriber);
+                cout << "Book with ID " << id << " details updated successfully." << endl;
+                break;
+            }
+        }
+        if (!found) {
+            cout << "Book with ID " << id << " not found." << endl;
+        }
+    }
+
+    // Display Details
+    void Details() {
+        for (int i = 0; i < noOfBooks; i++) {
+            cout << "Publication ID: " << arr_book[i].getId() << endl;
+            cout << "Book Title: " << arr_book[i].getTitle() << endl;
+            cout << "Author: " << arr_book[i].getAuthor() << endl;
+            cout << "Subscriber: " << arr_book[i].getSubscriber() << endl;
+        }
+    }
 };
+
+int main() {
+    Library book;
+    book.AddBook(1, "book1", "Author1", "Subscriber1");
+    book.AddBook(2, "Book2", "Author2", "Subscriber2");
+
+    book.DeleteBook(1);
+    book.EditBook(2, "New Title", "New Author", "New Subscriber");
+
+    book.Details();
+
+    return 0;
+}
