@@ -24,6 +24,7 @@ class Shape {
 protected:
 	string color;
 public:
+	Shape(){}
 	Shape (string c) : color(c){}
 	virtual double area()=0{}
 	virtual void display(){}
@@ -46,7 +47,7 @@ class Circle : public Shape {
 
 	double radius;
 public:
-	Circle(double r) : radius(r);
+	Circle(double r) : radius(r) {}
 	double area()override {
 		cout << "Area: " << 3.14 *radius * radius;
 	}
@@ -57,8 +58,8 @@ public:
 	}
 };
 int main() {
-	Rectangle r(4, 3);
-	Circle c(4);
-	c.display();
-	r.display();
+	Shape * r = new Rectangle(4, 3);
+	Shape *c= new Circle(4);
+	c->display();
+	r->display();
 }
