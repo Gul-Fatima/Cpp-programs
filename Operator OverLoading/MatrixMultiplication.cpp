@@ -81,3 +81,77 @@ int main() {
 
     return 0;
 }
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    #include <iostream>
+using namespace std;
+const int r = 3;
+
+class Mat {
+	int arr[r][r];
+	int rows, cols;
+public:
+	Mat(int r , int c):rows(r),cols(c){
+		for (int i = 0; i < r; i++)
+		{
+			for (int j = 0; j < c; j++)
+			{
+				arr[i][j] = 0;
+			}
+		}
+	}
+	void setvalue() {
+		for (int i = 0; i < rows; i++)
+		{
+			for (int j = 0; j < cols;j++) {
+				cout << "mat[" << i << "][" << j << "]: ";
+				cin >> arr[i][j];
+				//arr[i][j] = cin.get(arr[i][j]);
+			}
+		}
+	}
+	
+	Mat operator * (Mat& obj) {
+		if (rows != obj.cols) {
+			cout << "Invalid";
+			//return 0;
+		}
+		else {
+			Mat result(rows, obj.cols);
+			for (int i = 0; i < rows; i++) {
+
+				for (int j = 0; j < obj.cols;j++) {
+					result.arr[i][j] = 0;
+					for (int k = 0; k < cols; k++)
+					{
+						result.arr[i][j] += arr[i][k] * obj.arr[k][j];
+					}
+				}
+			}
+			return result;
+		}
+		
+	}
+	void display() {
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				cout << arr[i][j] << " ";
+			}
+			cout << endl;
+		}
+	}
+
+};
+//Mat result(rows, cols);
+int main() {
+	Mat m1(3, 3);
+	m1.setvalue();
+	Mat m2(3, 3);
+	m2.setvalue();
+	Mat m3 = m1 * m2;
+	m3.display();
+	return 0;
+}
