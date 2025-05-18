@@ -4,98 +4,69 @@
 // displays (e.g., temperature, humidity, pressure) are updated when the
 // weather station data changes.
 
+
 #include <iostream>
 #include <vector>
-#include <string>
+#include <algorithm>
 
 using namespace std;
 
-// Forward declaration
-class IObserver;
-
-// Subject class: WeatherStation
-class WeatherStation {
-    vector<IObserver*> observers;
-    float temperature;
-    float humidity;
-    float pressure;
-
-public:
-    void AddObserver(IObserver* observer) {
-        observers.push_back(observer);
-    }
-
-    void RemoveObserver(IObserver* observer) {
-        observers.erase(remove(observers.begin(), observers.end(), observer), observers.end());
-    }
-
-    void NotifyObservers();
-
-    void SetMeasurements(float temp, float hum, float pres) {
-        temperature = temp;
-        humidity = hum;
-        pressure = pres;
-        NotifyObservers();
-    }
-
-    float getTemperature() const { return temperature; }
-    float getHumidity() const { return humidity; }
-    float getPressure() const { return pressure; }
-};
-
-// Observer interface
 class IObserver {
 public:
-    virtual void Update(float temp, float humidity, float pressure) = 0;
-    virtual ~IObserver() {}
+    virtual void Update(float temp, float hum, float pres) = 0;
+    virtual ~IObserver() = default;
 };
 
-// Concrete Observer: TemperatureDisplay
+class WeatherStation {
+    vector<IObserver*> observers;
+    float temperature, humidity, pressure;
+
+public:
+    void AddObserver(IObserver* o) { observers.push_back(o); }
+    void RemoveObserver(IObserver* o) {
+        observers.erase(remove(observers.begin(), observers.end(), o), observers.end());
+    }
+    void NotifyObservers() {
+        for (auto* o : observers) o->Update(temperature, humidity, pressure);
+    }
+    void SetMeasurements(float t, float h, float p) {
+        temperature = t; 
+        humidity = h; 
+        pressure = p;
+        NotifyObservers();
+    }
+};
+
 class TemperatureDisplay : public IObserver {
 public:
-    void Update(float temp, float humidity, float pressure) override {
-        cout << "Temperature Display: " << temp << "°C" << endl;
+    void Update(float temp, float, float) override {
+        cout << "Temperature: " << temp << "°C\n";
     }
 };
 
-// Concrete Observer: HumidityDisplay
 class HumidityDisplay : public IObserver {
 public:
-    void Update(float temp, float humidity, float pressure) override {
-        cout << "Humidity Display: " << humidity << "%" << endl;
+    void Update(float, float hum, float) override {
+        cout << "Humidity: " << hum << "%\n";
     }
 };
 
-// Concrete Observer: PressureDisplay
 class PressureDisplay : public IObserver {
 public:
-    void Update(float temp, float humidity, float pressure) override {
-        cout << "Pressure Display: " << pressure << " hPa" << endl;
+    void Update(float, float, float pres) override {
+        cout << "Pressure: " << pres << " hPa\n";
     }
 };
 
-// NotifyObservers definition (after IObserver is fully defined)
-void WeatherStation::NotifyObservers() {
-    for (IObserver* observer : observers) {
-        observer->Update(temperature, humidity, pressure);
-    }
-}
-
-// Main function
 int main() {
     WeatherStation station;
+    TemperatureDisplay tempDisp;
+    HumidityDisplay humDisp;
+    PressureDisplay presDisp;
 
-    TemperatureDisplay tempDisplay;
-    HumidityDisplay humDisplay;
-    PressureDisplay presDisplay;
+    station.AddObserver(&tempDisp);
+    station.AddObserver(&humDisp);
+    station.AddObserver(&presDisp);
 
-    // Register observers
-    station.AddObserver(&tempDisplay);
-    station.AddObserver(&humDisplay);
-    station.AddObserver(&presDisplay);
-
-    // Simulate weather update
     station.SetMeasurements(25.3f, 65.0f, 1013.1f);
-
-    return 0;
 }
